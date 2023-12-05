@@ -7,7 +7,7 @@ const ContactItem = async ({ id, name, phone }) => {
       <span>{name}</span>
       <span>{phone}</span>
       <Link href={`${id}`}>Edit</Link>
-      <DeleteBtn />
+      <DeleteBtn id={id} />
     </li>
   );
 };

@@ -1,10 +1,5 @@
 "use client";
-
-import Link from "next/link";
-import { addContact } from "@/lib/actions";
-import { useFormState, useFormStatus } from "react-dom";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useFormStatus, useFormState } from "react-dom";
 
 const SubmitBtn = () => {
   const { pending } = useFormStatus();
@@ -15,24 +10,15 @@ const SubmitBtn = () => {
       className="text-violet-50 bg-violet-500 hover:bg-violet-600 px-4 py-2 uppercase font-bold mb-8"
       disabled={pending}
     >
-      {pending ? "...wait" : "add"}
+      {pending ? "...wait" : "save"}
     </button>
   );
 };
 
-const NewContactForm = () => {
-  const [state, formAction] = useFormState(addContact, null);
+const EditForm = ({ contact }) => {
+  const [message, formAction] = useFormState();
 
-  useEffect(() => {
-    if (state === "error") {
-      toast.error("there was an error");
-      return;
-    }
-
-    if (state === "success") {
-      toast.success("contact added");
-    }
-  }, [state]);
+  const { name, phone } = contact.data;
 
   return (
     <form action={formAction}>
@@ -44,12 +30,19 @@ const NewContactForm = () => {
         id="contact-name"
         name="name"
         className="form-input mb-4"
+        defaultValue={name}
       />
 
       <label htmlFor="contact-number" className="block text-gray-700">
         Number
       </label>
-      <input type="tel" id="contact-number" name="phone" className="mb-4" />
+      <input
+        type="tel"
+        id="contact-number"
+        name="phone"
+        className="mb-4"
+        defaultValue={phone}
+      />
 
       <div className="flex gap-3">
         <SubmitBtn />
@@ -57,4 +50,4 @@ const NewContactForm = () => {
     </form>
   );
 };
-export default NewContactForm;
+export default EditForm;
