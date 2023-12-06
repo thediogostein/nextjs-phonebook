@@ -1,4 +1,6 @@
 "use client";
+import { updateContact } from "@/lib/actions";
+import { useEffect } from "react";
 import { useFormStatus, useFormState } from "react-dom";
 
 const SubmitBtn = () => {
@@ -16,12 +18,23 @@ const SubmitBtn = () => {
 };
 
 const EditForm = ({ contact }) => {
-  const [message, formAction] = useFormState();
+  const [message, formAction] = useFormState(updateContact, null);
 
-  const { name, phone } = contact.data;
+  const { name, phone, id } = contact.data;
+
+  useEffect(() => {
+    if (message === "error") {
+      toast.error("there was an error");
+      return;
+    }
+    if (message === "success") {
+      toast.success("edited");
+    }
+  }, [message]);
 
   return (
     <form action={formAction}>
+      <input type="hidden" name="id" value={id} />
       <label htmlFor="contact-name" className="block text-gray-700">
         Name
       </label>

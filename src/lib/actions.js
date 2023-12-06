@@ -33,6 +33,7 @@ export const addContact = async (prevState, formData) => {
     .select();
 
   if (data) {
+    revalidatePath("/");
     redirect("/");
     return "success";
   }
@@ -59,6 +60,24 @@ export const deleteContact = async (prevState, formData) => {
   }
 };
 
-export const editContact = async (prevState, formData) => {
-  console.log("edited");
+export const updateContact = async (prevState, formData) => {
+  const id = formData.get("id");
+  const name = formData.get("name");
+  const phone = formData.get("phone");
+
+  const { error } = await supabase //
+    .from("Phonebook")
+    .update({ name, phone })
+    .eq("id", id);
+
+  if (!error) {
+    revalidatePath("/");
+    revalidatePath(`/${id}`);
+    redirect("/");
+    return "success";
+  }
+
+  if (error) {
+    return "error";
+  }
 };

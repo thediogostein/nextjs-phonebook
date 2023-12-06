@@ -10,7 +10,7 @@ const EditContact = async ({ params }) => {
       <Link href="/" className="underline mb-5">
         back to all contacts
       </Link>
-      <EditForm contact={contact} />
+      <EditForm contact={contact} id={params.id} />
     </main>
   );
 };

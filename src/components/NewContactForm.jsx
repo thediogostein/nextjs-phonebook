@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { addContact } from "@/lib/actions";
 import { useFormState, useFormStatus } from "react-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 const SubmitBtn = () => {
@@ -22,6 +22,7 @@ const SubmitBtn = () => {
 
 const NewContactForm = () => {
   const [state, formAction] = useFormState(addContact, null);
+  const formRef = useRef(null);
 
   useEffect(() => {
     if (state === "error") {
@@ -35,7 +36,13 @@ const NewContactForm = () => {
   }, [state]);
 
   return (
-    <form action={formAction}>
+    <form
+      ref={formRef}
+      action={async (formData) => {
+        formAction(formData);
+        formRef.current?.reset();
+      }}
+    >
       <label htmlFor="contact-name" className="block text-gray-700">
         Name
       </label>
